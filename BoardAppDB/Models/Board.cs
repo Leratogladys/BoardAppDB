@@ -6,7 +6,6 @@
 //                   each property
 
 using BoardAppDB.Infrastructure;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BoardAppDB.Models;
@@ -180,4 +179,3 @@ public class Board
         return $"{BoardCode}: {Make} {Model} with {FlashKb} KB flash at R{Price:0.00}";
     }// end method
 }// end class Board
-

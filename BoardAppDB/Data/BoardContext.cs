@@ -4,8 +4,8 @@
 // Purpose         : Database context class used by Entity Framework Core
 //                   to access and configure Board data in the SQLite database.
 
-using Microsoft.EntityFrameworkCore;
 using BoardAppDB.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoardAppDB.Data
 {
@@ -21,7 +21,7 @@ namespace BoardAppDB.Data
         // Output Type       : None
         //
 
-        public BoardContext(DbContextOptions<BoardContext> options): base(options) { }
+        public BoardContext(DbContextOptions<BoardContext> options) : base(options) { }
 
         //
         // Name              : property DbSet<Board>? Boards
