@@ -7,128 +7,135 @@ namespace BoardAppDB.Controllers
     public class BoardController : Controller
     {
         private readonly IBoard _boardRepo;
-        public BoardController(IBoardRepository boardRepository)
+
+        public BoardController(IBoard boardRepository)
         {
-            _boardRepository = boardRepository;
+            _boardRepo = boardRepository;
         }
+
+        // GET: Board
         public IActionResult Index()
         {
-            IEnumerable<Board> boards = _boardRepository.GetBoards();
-            ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-            ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-            ViewBag.ShowDelete = true; // Set the flag to show the "Delete" button
+            IEnumerable<Board> boards = _boardRepo.GetBoards();
+
             return View(boards);
         }
+
+        // GET: Board/Details?boardCode=1001
         public IActionResult Details(string boardCode)
         {
-          Board board = _boardRepository.Detail(boardCode);
-            if(board == null)
-            {
-                return NotFound();
-            }
-            ViewBag.ShowAdd = false; // Set the flag to hide the "Add" button
-            ViewBag.ShowSave = true; // Set the flag to show the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            Board board = _boardRepo.Details(boardCode);
 
             return View(board);
         }
+
+        // GET: Board/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-            ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            ViewBag.ShowAdd = true;
 
             return View();
         }
+
+        // POST: Board/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(
             [Bind("BoardCode,Manufacturer,Model,FlashSize,Price")] Board board)
         {
-            if(_boardRepo.IsExist(board.BoardCode))
+            if (_boardRepo.IsExist(board.BoardCode))
             {
-                ModelState.AddModelError("BoardCode", "Board code already exists.");
+                ModelState.AddModelError(
+                    "BoardCode",
+                    "A board with that board code already exists.");
             }
-            if(ModelState.IsValid)
-            {
-                _boardRepo.Add(board);
-                
-                ViewBsg.SuccessMessage = $"Board{board.BoardCode} was added ";
-                ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-                ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-                ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
 
-                return View(board);
+            if (ModelState.IsValid)
+            {
+                _boardRepo.Create(board);
+
+                ViewBag.SuccessMessage =
+                    $"{board.BoardCode} was added.";
+
+                ViewBag.ShowAdd = false;
             }
-            ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-            ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            else
+            {
+                ViewBag.ShowAdd = true;
+            }
 
             return View(board);
         }
+
+        // GET: Board/Edit?boardCode=1001
+        [HttpGet]
         public IActionResult Edit(string boardCode)
         {
-            Board board = _boardRepo.Detail(boardCode);
-            if(board == null)
-            {
-                return NotFound();
-            }
-            ViewBag.ShowAdd = false; // Set the flag to hide the "Add" button
-            ViewBag.ShowSave = true; // Set the flag to show the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            Board board = _boardRepo.Details(boardCode);
+
+            ViewBag.ShowSave = true;
+
             return View(board);
         }
+
+        // POST: Board/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(string boardCode, [Bind("BoardCode,Manufacturer,Model,FlashSize,Price")] Board board)
+        public IActionResult Edit(
+            string boardCode,
+            [Bind("Manufacturer,Model,FlashSize,Price")] Board board)
         {
-            board.BoardCode = boardCode; // Ensure the BoardCode is set correctly
-        }
-            if(ModelState.IsValid)
+            board.BoardCode = boardCode;
+
+            if (ModelState.IsValid)
             {
                 _boardRepo.Edit(board);
-                ViewBag.SuccessMessage = $"Board {board.BoardCode} was updated successfully.";
-                ViewBag.ShowAdd = false; // Set the flag to hide the "Add" button
-                ViewBag.ShowSave = true; // Set the flag to show the "Save" button
-                ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
-                return View(board);
+
+                ViewBag.SuccessMessage =
+                    $"{boardCode} was updated.";
+
+                ViewBag.ShowSave = false;
             }
-            ViewBag.ShowAdd = false; // Set the flag to hide the "Add" button
-            ViewBag.ShowSave = true; // Set the flag to show the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            else
+            {
+                ViewBag.ShowSave = true;
+            }
+
             return View(board);
         }
-public IActionResult Delete(string boardCode)
+
+        // GET: Board/Delete?boardCode=1001
+        [HttpGet]
+        public IActionResult Delete(string boardCode)
         {
-            Board board = _boardRepo.Detail(boardCode);
-            if(board == null)
-            {
-                return NotFound();
-            }
-            _boardRepo.Delete(board);
-            ViewBag.SuccessMessage = $"Board {board.BoardCode} was deleted successfully.";
-            ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-            ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            Board board = _boardRepo.Details(boardCode);
+
+            ViewBag.ShowDelete = true;
+
             return View(board);
-}
-[HttpPost]
+        }
+
+        // POST: Board/Delete
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(string boardCode)
+        public IActionResult Delete(string boardCode, Board board)
         {
-            Board board = _boardRepo.Detail(boardCode);
-            if(board == null)
+            Board existingBoard = _boardRepo.Details(boardCode);
+
+            if (existingBoard != null)
             {
-                return NotFound();
+                _boardRepo.Delete(existingBoard);
+
+                board = existingBoard;
+
+                ViewBag.SuccessMessage =
+                    $"{boardCode} was deleted.";
             }
-            _boardRepo.Delete(board);
 
-            ViewBag.SuccessMessage = $"Board {board.BoardCode} was deleted successfully.";
-            ViewBag.ShowAdd = true; // Set the flag to show the "Add" button
-            ViewBag.ShowSave = false; // Set the flag to hide the "Save" button
-            ViewBag.ShowDelete = false; // Set the flag to hide the "Delete" button
+            ViewBag.ShowDelete = false;
 
-            return View("Delete",board);
-}
-}
+            return View(board);
+        }
+    }
 }
