@@ -17,7 +17,6 @@ namespace BoardAppDB.Controllers
         public IActionResult Index()
         {
             IEnumerable<Board> boards = _boardRepo.GetBoards();
-
             return View(boards);
         }
 
@@ -25,7 +24,6 @@ namespace BoardAppDB.Controllers
         public IActionResult Details(string boardCode)
         {
             Board board = _boardRepo.Details(boardCode);
-
             return View(board);
         }
 
@@ -34,7 +32,6 @@ namespace BoardAppDB.Controllers
         public IActionResult Create()
         {
             ViewBag.ShowAdd = true;
-
             return View();
         }
 
@@ -54,10 +51,7 @@ namespace BoardAppDB.Controllers
             if (ModelState.IsValid)
             {
                 _boardRepo.Create(board);
-
-                ViewBag.SuccessMessage =
-                    $"{board.BoardCode} was added.";
-
+                ViewBag.SuccessMessage = $"Board {board.BoardCode} was added.";
                 ViewBag.ShowAdd = false;
             }
             else
@@ -73,9 +67,7 @@ namespace BoardAppDB.Controllers
         public IActionResult Edit(string boardCode)
         {
             Board board = _boardRepo.Details(boardCode);
-
             ViewBag.ShowSave = true;
-
             return View(board);
         }
 
@@ -91,10 +83,7 @@ namespace BoardAppDB.Controllers
             if (ModelState.IsValid)
             {
                 _boardRepo.Edit(board);
-
-                ViewBag.SuccessMessage =
-                    $"{boardCode} was updated.";
-
+                ViewBag.SuccessMessage = $"Board {boardCode} was updated.";
                 ViewBag.ShowSave = false;
             }
             else
@@ -110,9 +99,7 @@ namespace BoardAppDB.Controllers
         public IActionResult Delete(string boardCode)
         {
             Board board = _boardRepo.Details(boardCode);
-
             ViewBag.ShowDelete = true;
-
             return View(board);
         }
 
@@ -126,16 +113,13 @@ namespace BoardAppDB.Controllers
             if (existingBoard != null)
             {
                 _boardRepo.Delete(existingBoard);
-
                 board = existingBoard;
-
-                ViewBag.SuccessMessage =
-                    $"{boardCode} was deleted.";
+                ViewBag.SuccessMessage = $"Board {boardCode} was deleted.";
             }
 
             ViewBag.ShowDelete = false;
-
             return View(board);
         }
     }
 }
+
