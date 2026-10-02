@@ -1,5 +1,4 @@
-﻿
-// Student nr      : 222049725;223022994;225007032;220024412;225004492
+﻿// Student nr      : 222049725;223022994;225007032;220024412;225004492
 // Programmer name : BoardAppDB Group
 // Assignment nr   : Practical Assessment 2
 // Purpose         : Repository class used to perform database operations
