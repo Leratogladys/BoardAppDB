@@ -1,4 +1,4 @@
-﻿// Programmer name : BoardApp Group
+﻿// Programmer name : BoardAppDB Group
 // Student nr      : 222049725;223022994;225007032;220024412;225004492
 // Assignment nr   : Practical Assessment 2
 // Purpose         : Domain model representing a microcontroller
