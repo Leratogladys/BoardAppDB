@@ -82,4 +82,4 @@ namespace BoardAppDB.Infrastructure
             return Enumerable.Empty<ModelValidationResult>();
         } //end method
     } //end class VerifyFlashSizeAttribute
-} // end namespace BoardApp.Infrastructure
+} // end namespace BoardAppDB.Infrastructure
