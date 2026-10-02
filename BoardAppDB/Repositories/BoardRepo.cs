@@ -1,10 +1,7 @@
-﻿
-
-// Student nr      : 222049725;223022994;225007032;220024412;225004492
 // Programmer name : BoardAppDB Group
+// Student nr      : 222049725;223022994;225007032;220024412;225004492
 // Assignment nr   : Practical Assessment 2
-// Purpose         : Repository class used to perform database operations
-//                   for Board entities through Entity Framework Core.
+// Purpose         : Repository used to perform CRUD operations on Board records.
 
 using BoardAppDB.Data;
 using BoardAppDB.Interfaces;
@@ -18,8 +15,8 @@ namespace BoardAppDB.Repositories
 
         //
         // Name              : BoardRepo(BoardContext boardContext)
-        // Purpose           : Creates the Board repository using a BoardContext
-        //                     supplied through dependency injection
+        // Purpose           : Creates the Board repository using the injected
+        //                     BoardContext
         // Re-use            : None
         // Method Parameters : BoardContext boardContext
         //                     - database context used to access Board data
@@ -32,42 +29,40 @@ namespace BoardAppDB.Repositories
 
         //
         // Name              : IEnumerable<Board> GetBoards()
-        // Purpose           : Retrieves all Board records from the database
+        // Purpose           : Retrieves all Board records
         // Re-use            : None
         // Method Parameters : None
         // Output Type       : IEnumerable<Board>
-        //                     - collection of Board objects retrieved from the database
+        //                     - collection of Board records
         //
         public IEnumerable<Board> GetBoards()
         {
-            return boardContext.Boards;
+            return boardContext.Boards!;
         } // end method GetBoards
 
         //
         // Name              : Board Details(string boardCode)
-        // Purpose           : Retrieves a Board record using its unique board code
+        // Purpose           : Retrieves a Board using its unique board code
         // Re-use            : None
         // Method Parameters : string boardCode
-        //                     - unique code of the Board to retrieve
+        //                     - board code used to find the Board
         // Output Type       : Board
-        //                     - Board object matching the supplied board code
+        //                     - matching Board record
         //
         public Board Details(string boardCode)
         {
-            var board = boardContext.Boards?
-                .FirstOrDefault(x => x.BoardCode == boardCode);
-
-            return board;
+            return boardContext.Boards!
+                .FirstOrDefault(x => x.BoardCode == boardCode)!;
         } // end method Details
 
         //
         // Name              : Board Create(Board board)
-        // Purpose           : Adds a new Board record to the database
+        // Purpose           : Adds a new Board record
         // Re-use            : None
         // Method Parameters : Board board
-        //                     - Board object to be added to the database
+        //                     - Board record to add
         // Output Type       : Board
-        //                     - the Board object that was added
+        //                     - created Board record
         //
         public Board Create(Board board)
         {
@@ -79,12 +74,12 @@ namespace BoardAppDB.Repositories
 
         //
         // Name              : Board Edit(Board board)
-        // Purpose           : Updates an existing Board record in the database
+        // Purpose           : Updates an existing Board record
         // Re-use            : None
         // Method Parameters : Board board
-        //                     - Board object containing the updated values
+        //                     - Board record containing the changes
         // Output Type       : Board
-        //                     - the updated Board object
+        //                     - updated Board record
         //
         public Board Edit(Board board)
         {
@@ -96,13 +91,12 @@ namespace BoardAppDB.Repositories
 
         //
         // Name              : bool Delete(Board board)
-        // Purpose           : Deletes an existing Board record from the database
+        // Purpose           : Deletes an existing Board record
         // Re-use            : IsExist(string boardCode)
         // Method Parameters : Board board
-        //                     - Board object to be deleted
+        //                     - Board record to delete
         // Output Type       : bool
-        //                     - true if the Board was successfully deleted;
-        //                     otherwise false
+        //                     - true if deletion was successful; otherwise false
         //
         public bool Delete(Board board)
         {
@@ -114,13 +108,12 @@ namespace BoardAppDB.Repositories
 
         //
         // Name              : bool IsExist(string boardCode)
-        // Purpose           : Checks whether a Board with the specified board code exists
+        // Purpose           : Checks whether a Board code exists
         // Re-use            : Details(string boardCode)
         // Method Parameters : string boardCode
-        //                     - unique board code to search for
+        //                     - board code to check
         // Output Type       : bool
-        //                     - true if a matching Board exists;
-        //                     otherwise false
+        //                     - true if the Board exists; otherwise false
         //
         public bool IsExist(string boardCode)
         {
@@ -135,6 +128,5 @@ namespace BoardAppDB.Repositories
 
             return isExist;
         } // end method IsExist
-
     } // end class BoardRepo
 } // end namespace BoardAppDB.Repositories
